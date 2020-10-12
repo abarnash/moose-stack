@@ -43,12 +43,44 @@ Returns the following
 ```
 
 ```gql
+mutation Login {
+  login(username: "test-user") {
+    username
+    name
+    token
+  }
+}
+```
+
+Returns the following
+
+```json
+{
+  "data": {
+    "login": {
+      "username": "test-user",
+      "name": "Test User",
+      "token": "dGVzdC11c2Vy"
+    }
+  }
+}
+```
+
+```gql
 query GetUser {
-  user(username: "test-user") {
+  user {
     id
     name
     email
   }
+}
+```
+
+Along with the authorization token from the last query provided as an http header
+
+```json
+{
+  "authorization": "dGVzdC11c2VyMg=="
 }
 ```
 
@@ -57,7 +89,7 @@ returns the following
 ```json
 {
   "data": {
-    "user": {
+    "loggedInUser": {
       "id": "99400792-b740-45df-8ff4-04b94ef686b9",
       "name": "Test User",
       "email": "test-user@gmail.com"
