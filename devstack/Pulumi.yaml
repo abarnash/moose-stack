@@ -1,0 +1,3 @@
+name: moose-devstack
+runtime: nodejs
+description: Local devstack for moose

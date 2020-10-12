@@ -1,0 +1,8 @@
+{
+    "name": "moose-devstack",
+    "main": "index.js",
+    "dependencies": {
+        "@pulumi/docker": "^2.3.1",
+        "@pulumi/pulumi": "^2.0.0"
+    }
+}
