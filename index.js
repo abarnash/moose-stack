@@ -1,2 +1,2 @@
 "use strict";
-const pulumi = require("@pulumi/pulumi");
+const pulumi =  require("@pulumi/pulumi");
