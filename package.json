@@ -1,0 +1,8 @@
+{
+    "name": "moose-stack",
+    "main": "stacks/index.js",
+    "dependencies": {
+        "@pulumi/kubernetes": "^2.6.2",
+        "@pulumi/pulumi": "^2.0.0"
+    }
+}

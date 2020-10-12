@@ -1,0 +1,3 @@
+name: moose-stack
+runtime: nodejs
+description: The k8s stack to deploy moose app to GCP
