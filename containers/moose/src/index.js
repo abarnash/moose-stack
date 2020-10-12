@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 
 const { typeDefs } = require("./typeDefs");
 const { resolvers } = require("./resolvers");
-const { User } = require('./models');
+const { User } = require('./models/User');
 
 const {
   MONGODB_SERVICE_HOST = 'localhost',
