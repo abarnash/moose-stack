@@ -1,7 +1,7 @@
 const usersResolvers = {
   Query: {
-    user: async (_, { username }, { dataSources }) => {
-      const existingUser = await dataSources.users.findUser({ username });
+    loggedInUser: async (_, __, { dataSources }) => {
+      const existingUser = await dataSources.users.findUser();
 
       return existingUser;
     }
@@ -24,9 +24,16 @@ const usersResolvers = {
         success: true,
         message: `New user with username "${user.username}" created!`,
         user
-      }
+      };
+    },
+    login: async (_, { username }, { dataSources }) => {
+      const user = await dataSources.users.findUser({ username });
+      if (user) {
+        user.token = Buffer.from(username).toString('base64');
 
-    }
+        return user;
+      }
+    },
   },
 };
 

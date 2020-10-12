@@ -24,7 +24,16 @@ const dataSources = () => ({
   users: new User(client.db().collection('users')),
 });
 
-const server = new ApolloServer({ typeDefs, resolvers, dataSources });
+const context = async ({ req }) => {
+  // Simple auth check on every request based on the username provided in the header
+  const auth = (req.headers && req.headers.authorization) || '';
+  const username = Buffer.from(auth, 'base64').toString('ascii');
+  const user = await client.db().collection('users').findOne({ username });
+
+  return { user };
+};
+
+const server = new ApolloServer({ typeDefs, resolvers, dataSources, context });
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);

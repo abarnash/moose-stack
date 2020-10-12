@@ -21,7 +21,9 @@ class User extends DataSource {
     return await this.collection.insertOne({ username, name, email, id: v4() }).then(({ ops }) => ops[0])
   }
 
-  async findUser({ username } = {}) {
+  async findUser({ username: usernameArg } = {}) {
+    const username = this.context && this.context.user ? this.context.user.username : usernameArg;
+
     return await this.collection.findOne({ username })
   }
 }

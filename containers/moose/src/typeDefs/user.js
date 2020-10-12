@@ -6,14 +6,16 @@ const user = gql`
     name: String
     username: String!
     email: String
+    token: String
   }
 
   type Query {
-    user(username: String!): User,
+    loggedInUser: User,
   }
 
   type Mutation {
     newUser(username: String!, name: String, email: String): NewUserResponse!
+    login(username: String!): User!
   }
 
   type NewUserResponse {
