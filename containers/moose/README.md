@@ -14,4 +14,4 @@ Check out the graphql playground at http://localhost:4000/
 
 ### GraphQL Queries and mutations
 
-< Moved to queries >
+< Moved to QUERIES.md >
