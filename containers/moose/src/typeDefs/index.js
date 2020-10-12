@@ -1,7 +1,8 @@
 const { query } = require("./query");
-const { bookType } = require("./types");
+const { mutation } = require("./mutation");
+const { bookType, userType } = require("./types");
 
-const typeDefs = [query, bookType];
+const typeDefs = [query, mutation, bookType, userType];
 
 module.exports = {
   typeDefs,
