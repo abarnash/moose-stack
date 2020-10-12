@@ -14,7 +14,7 @@ const stack = ({
   const accountsKn = knative.service({
     name: 'accounts',
     namespace: namespace,
-    image: 'docker.io/abarnash/accounts',
+    image: 'docker.io/abarnash/accounts:latest',
     env: {
       KN_HOST: host,
       KN_PORT: '8080'
@@ -27,7 +27,7 @@ const stack = ({
   const reviewsKn = knative.service({
     name: 'reviews',
     namespace: namespace,
-    image: 'docker.io/abarnash/reviews',
+    image: 'docker.io/abarnash/reviews:latest',
     env: {
       KN_HOST: host,
       KN_PORT: '8080'
@@ -40,7 +40,7 @@ const stack = ({
   const productsKn = knative.service({
     name: 'products',
     namespace: namespace,
-    image: 'docker.io/abarnash/products',
+    image: 'docker.io/abarnash/products:latest',
     env: {
       KN_HOST: host,
       KN_PORT: '8080'
@@ -53,7 +53,7 @@ const stack = ({
   const inventoryKn = knative.service({
     name: 'inventory',
     namespace: namespace,
-    image: 'docker.io/abarnash/inventory',
+    image: 'docker.io/abarnash/inventory:latest',
     env: {
       KN_HOST: host,
       KN_PORT: '8080'
@@ -66,7 +66,7 @@ const stack = ({
   const gatewayKn = knative.service({
     name: 'gateway',
     namespace: namespace,
-    image: 'docker.io/abarnash/gateway',
+    image: 'docker.io/abarnash/gateway:latest',
     scale: {
       min: 1
     },

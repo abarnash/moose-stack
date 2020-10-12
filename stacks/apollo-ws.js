@@ -31,7 +31,7 @@ const stack = ({
   const wsServerKn = knative.service({
     name: 'apollo-ws',
     namespace: namespace,
-    image: 'docker.io/abarnash/apollo-ws',
+    image: 'docker.io/abarnash/apollo-ws:latest',
     env: {
       KN_HOST: host,
       KN_PORT: '8080',
