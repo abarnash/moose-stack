@@ -1,6 +1,7 @@
 const { usersResolvers } = require('./usersResolvers');
+const { gamesResolvers } = require('./gamesResolvers');
 
-const resolvers = [usersResolvers];
+const resolvers = [usersResolvers, gamesResolvers];
 
 module.exports = {
   resolvers,

@@ -9,15 +9,6 @@ const user = gql`
     token: String
   }
 
-  type Query {
-    loggedInUser: User,
-  }
-
-  type Mutation {
-    newUser(username: String!, name: String, email: String): NewUserResponse!
-    login(username: String!): User!
-  }
-
   type NewUserResponse {
     success: Boolean!
     message: String
