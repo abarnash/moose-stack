@@ -36,3 +36,29 @@ const mongoContainer = new docker.Container("mongo", {
         external: 27017,
     }]
 })
+
+// Build and push image to gcr repository
+
+const imageName = "apollo-ws"
+const orgName = 'abarnash'
+
+const apolloWSImage = new docker.Image(imageName, {
+    imageName: pulumi.interpolate`docker.io/${orgName}/${imageName}-dev:latest`,
+    build: {
+        context: "../containers/apollo-ws",
+    },
+    // skipPush: true,
+    keepLocally: true
+});
+
+const apolloWSContainer = new docker.Container("apollo-ws-container", {
+    image:  `${orgName}/${imageName}-dev:latest`,
+    restart: "on-failure",
+    ports: [{
+        internal: 4005,
+        external: 4005,
+    }]
+})
+
+// Digest exported so it's easy to match updates happening in cloud run project
+// export const digest = myImage.digest;
