@@ -13,6 +13,6 @@ RUN npm run build
 FROM nginx:stable-alpine
 COPY --from=build /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
-RUN mkdir /var/logfiles/nginx
+RUN mkdir -p /var/logfiles/nginx
 EXPOSE 80
-CMD ["", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]

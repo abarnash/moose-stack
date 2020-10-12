@@ -39,24 +39,24 @@ const mongoContainer = new docker.Container("mongo", {
 
 // Build and push image to gcr repository
 
-const imageName = "apollo-ws"
+const imageName = "react-client"
 const orgName = 'abarnash'
 
-const apolloWSImage = new docker.Image(imageName, {
-    imageName: pulumi.interpolate`docker.io/${orgName}/${imageName}-dev:latest`,
+const reactImage = new docker.Image(imageName, {
+    imageName: pulumi.interpolate`docker.io/${orgName}/${imageName}:latest`,
     build: {
-        context: "../containers/apollo-ws",
+        context: "../containers/kerry-react",
     },
     // skipPush: true,
     keepLocally: true
 });
 
-const apolloWSContainer = new docker.Container("apollo-ws-container", {
-    image:  `${orgName}/${imageName}-dev:latest`,
+const reactContainer = new docker.Container("apollo-ws-container", {
+    image:  `${orgName}/${imageName}:latest`,
     restart: "on-failure",
     ports: [{
-        internal: 4005,
-        external: 4005,
+        internal: 80,
+        external: 3000,
     }]
 })
 

@@ -11,7 +11,7 @@ const DOMAIN = 'cloudleash.org'
 
 const NAMESPACE_LABEL = process.env.PULUMI_NODEJS_STACK
 
-const ns = new k8s.core.v1.Namespace('leashk8s-dev', {
+const ns = new k8s.core.v1.Namespace(NAMESPACE_LABEL, {
   metadata: {
     name: NAMESPACE_LABEL
   }
@@ -28,6 +28,20 @@ const redis = redisChart.redis({
 const apolloWS = apolloWSStack.stack({
   domain: DOMAIN,
   namespace: NAMESPACE_LABEL
+})
+
+
+const accountsKn = knative.service({
+  name: 'react-client',
+  namespace: NAMESPACE_LABEL,
+  image: 'abarnash/react-client',
+  port: 80,
+  scale: {
+    min: 1
+  },
+  env: {
+    KN_PORT: '80'
+  }
 })
 
 const apollo = apolloStack.stack({
