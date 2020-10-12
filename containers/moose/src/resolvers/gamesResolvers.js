@@ -8,7 +8,7 @@ const gamesResolvers = {
 
       return {
         success: true,
-        message: `New game with username "${game.url}" created!`,
+        message: `New game with url "${game.url}" created!`,
         game
       };
     },

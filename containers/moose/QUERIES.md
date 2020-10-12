@@ -84,3 +84,12 @@ mutation AddGame {
     }
   }
 }
+
+query GetGame {
+  game(url: "what-coat") {
+    startTime
+    createdBy {
+      username
+    }
+  }
+}

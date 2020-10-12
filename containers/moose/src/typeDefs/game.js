@@ -4,7 +4,7 @@ const game = gql`
   type Game {
     id: ID!
     url: String!
-    creatingUser: User!
+    createdBy: User!
     startTime: String!
     endTime: String
     users: [User]!

@@ -14,16 +14,14 @@ class Game extends DataSource {
 
   async createGame() {
     const url = randomWords(2).join("-")
-    const creatingUser = this.context && this.context.user;
+    const createdBy = this.context && this.context.user;
     const startTime = Date.now();
 
-    return await this.collection.insertOne({ url, creatingUser, startTime, id: v4() }).then(({ ops }) => ops[0])
+    return await this.collection.insertOne({ url, createdBy, startTime, id: v4() }).then(({ ops }) => ops[0])
   }
 
-  async findUser({ username: usernameArg } = {}) {
-    const username = this.context && this.context.user ? this.context.user.username : usernameArg;
-
-    return await this.collection.findOne({ username })
+  async findGame(url) {
+    return await this.collection.findOne({ url })
   }
 }
 
