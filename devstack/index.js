@@ -5,6 +5,9 @@ const docker = require("@pulumi/docker")
 
 const network = new docker.Network("net");
 
+//------------------------------------------------------------------------------
+// Redis Service
+
 // Also before creating a container, we must first obtain a "RemoteImage", which is a reference to an external image
 // that is downloaded to the local machine. In this case, we're referring to an image on Docker Hub.
 const redisImage = new docker.RemoteImage("redis-image", {
@@ -22,6 +25,9 @@ const redisContainer = new docker.Container("redis", {
     }]
 })
 
+//------------------------------------------------------------------------------
+// Mongo Service
+
 const mongoImage = new docker.RemoteImage("mongo-image", {
   name: "mongo:latest",
   keepLocally: true
@@ -37,7 +43,8 @@ const mongoContainer = new docker.Container("mongo", {
     }]
 })
 
-// Build and push image to gcr repository
+//------------------------------------------------------------------------------
+// React Frontend
 
 const imageName = "react-client"
 const orgName = 'abarnash'
@@ -51,7 +58,7 @@ const reactImage = new docker.Image(imageName, {
     keepLocally: true
 });
 
-const reactContainer = new docker.Container("apollo-ws-container", {
+const reactContainer = new docker.Container("react-client-container", {
     image:  `${orgName}/${imageName}:latest`,
     restart: "on-failure",
     ports: [{
@@ -59,6 +66,3 @@ const reactContainer = new docker.Container("apollo-ws-container", {
         external: 3000,
     }]
 })
-
-// Digest exported so it's easy to match updates happening in cloud run project
-// export const digest = myImage.digest;

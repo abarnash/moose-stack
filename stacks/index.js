@@ -34,7 +34,7 @@ const apolloWS = apolloWSStack.stack({
 const accountsKn = knative.service({
   name: 'react-client',
   namespace: NAMESPACE_LABEL,
-  image: 'abarnash/react-client',
+  image: 'docker.io/abarnash/react-client:latest',
   port: 80,
   scale: {
     min: 1
