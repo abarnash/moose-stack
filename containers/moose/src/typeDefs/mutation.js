@@ -6,6 +6,7 @@ const mutation = gql`
     login(username: String!): User!
 
     newGame: NewGameResponse!
+    joinGame(url: String!): JoinGameResponse!
   }
 `;
 

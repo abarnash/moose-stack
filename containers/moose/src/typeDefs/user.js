@@ -7,12 +7,18 @@ const user = gql`
     username: String!
     email: String
     token: String
+    currentGameUrl: String
   }
 
   type NewUserResponse {
     success: Boolean!
     message: String
     user: User
+  }
+
+  type JoinGameResponse {
+    success: Boolean!
+    message: String
   }
 `;
 

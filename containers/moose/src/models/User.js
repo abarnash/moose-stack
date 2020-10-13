@@ -26,6 +26,28 @@ class User extends DataSource {
 
     return await this.collection.findOne({ username })
   }
+
+  async joinGame(url) {
+    const currentUser = this.context && this.context.user;
+
+    if (!currentUser) {
+      return {
+        success: false,
+        message: "User must be logged in to perform this action"
+      }
+    }
+
+    this.collection.findOneAndUpdate(
+      { id: currentUser.id },
+      { $set: { currentGameUrl: url } },
+      { returnNewDocument: true }
+    );
+
+    return {
+      success: true,
+      message: `User ${currentUser.username} has joined game ${url}`
+    };
+  }
 }
 
 module.exports = {

@@ -34,6 +34,18 @@ const usersResolvers = {
         return user;
       }
     },
+    joinGame: async (_, { url }, { dataSources }) => {
+      const game = await dataSources.games.findGame(url)
+
+      if (!game) {
+        return {
+          success: false,
+          message: `Cannot find game with url "${url}"`,
+        }
+      }
+
+      return await dataSources.users.joinGame(url)
+    },
   },
 };
 

@@ -49,6 +49,7 @@ query GetLoggedInUser {
     username
     name
     email
+    currentGameUrl
   }
 }
 
@@ -58,7 +59,8 @@ query GetLoggedInUser {
       "id": "99400792-b740-45df-8ff4-04b94ef686b9",
       "username": "test-user",
       "name": "Test User",
-      "email": "test-user@gmail.com"
+      "email": "test-user@gmail.com",
+      "currentGameUrl": "grandfather-seven"
     }
   }
 }
@@ -90,6 +92,57 @@ query GetGame {
     startTime
     createdBy {
       username
+    }
+  }
+}
+
+{
+  "data": {
+    "game": {
+      "startTime": "1602544727872",
+      "createdBy": {
+        "username": "test-user"
+      }
+    }
+  }
+}
+
+
+mutation JoinGame {
+  joinGame(url: "what-coat") {
+    message
+    success
+    user {
+      currentGameUrl
+    }
+  }
+}
+
+{
+  "data": {
+    "joinGame": {
+      "message": "User test-user has joined game grandfather-seven",
+      "success": true
+    }
+  }
+}
+
+### Errors
+
+{
+  "data": {
+    "joinGame": {
+      "message": "Cannot find game with url \"grandfather\"",
+      "success": false
+    }
+  }
+}
+
+{
+  "data": {
+    "joinGame": {
+      "message": "User must be logged in to perform this action",
+      "success": false
     }
   }
 }
