@@ -1,7 +1,5 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/navbar';
-import Nav from 'react-bootstrap/nav';
-import Button from 'react-bootstrap/button';
+import {Button, Nav, Navbar} from 'react-bootstrap';
 import {Route, BrowserRouter, Switch} from 'react-router-dom';
 import './App.css';
 import {Home} from './Home';
