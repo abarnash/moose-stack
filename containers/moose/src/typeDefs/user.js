@@ -7,21 +7,19 @@ const user = gql`
     username: String!
     email: String
     token: String
-  }
-
-  type Query {
-    loggedInUser: User,
-  }
-
-  type Mutation {
-    newUser(username: String!, name: String, email: String): NewUserResponse!
-    login(username: String!): User!
+    currentGameUrl: String
   }
 
   type NewUserResponse {
     success: Boolean!
     message: String
     user: User
+  }
+
+  type JoinGameResponse {
+    success: Boolean!
+    message: String
+    game: Game
   }
 `;
 

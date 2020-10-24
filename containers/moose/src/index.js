@@ -3,7 +3,9 @@ const { MongoClient } = require('mongodb');
 
 const { typeDefs } = require("./typeDefs");
 const { resolvers } = require("./resolvers");
+
 const { User } = require('./models/User');
+const { Game } = require('./models/Game');
 
 const {
   MONGODB_SERVICE_HOST = 'localhost',
@@ -22,6 +24,7 @@ connect()
 
 const dataSources = () => ({
   users: new User(client.db().collection('users')),
+  games: new Game(client.db().collection('games')),
 });
 
 const context = async ({ req }) => {
