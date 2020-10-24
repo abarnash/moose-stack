@@ -6,7 +6,7 @@ const gamesResolvers = {
     newGame: async (_, __, { dataSources }) => dataSources.games.createGame(),
   },
   Game: {
-    users: async (game, _, { dataSources }) => dataSources.users.inGame(game.url)
+    users: async (game, _, { dataSources }) => dataSources.users.inGame(game.url),
   },
 };
 

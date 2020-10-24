@@ -1,23 +1,21 @@
 const { gql } = require("apollo-server");
 
-const user = gql`
-  type User {
+const bid = gql`
+  type Bid {
     id: ID!
-    name: String
     username: String!
-    email: String
-    token: String
-    currentGameUrl: String
-    drinksInPot: Int!
+    gameUrl: String!
+    drinks: Int!
+    inPot: Boolean!
   }
 
-  type NewUserResponse {
+  type BidResponse {
     success: Boolean!
     message: String
-    user: User
+    game: Game
   }
 
-  type JoinGameResponse {
+  type EmptyPotResponse {
     success: Boolean!
     message: String
     game: Game
@@ -25,5 +23,5 @@ const user = gql`
 `;
 
 module.exports = {
-  user,
+  bid,
 };

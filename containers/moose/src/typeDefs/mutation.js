@@ -8,6 +8,9 @@ const mutation = gql`
     newGame: NewGameResponse!
     joinGame(url: String!): JoinGameResponse!
     leaveGame: LeaveGameResponse!
+
+    addBid(drinks: Int!): BidResponse!
+    emptyPot(gameUrl: String!): EmptyPotResponse!
   }
 `;
 
