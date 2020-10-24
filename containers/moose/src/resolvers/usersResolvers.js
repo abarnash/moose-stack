@@ -25,6 +25,7 @@ const usersResolvers = {
     },
     login: async (_, { username }, { dataSources }) => {
       const user = await dataSources.users.findUser({ username });
+
       if (user) {
         user.token = Buffer.from(username).toString('base64');
 
@@ -43,6 +44,7 @@ const usersResolvers = {
 
       return await dataSources.users.joinGame(game)
     },
+    leaveGame: async (_, __, { dataSources }) => dataSources.users.leaveGame(),
   },
 };
 

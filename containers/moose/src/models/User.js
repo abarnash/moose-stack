@@ -54,6 +54,37 @@ class User extends DataSource {
     };
   }
 
+  async leaveGame() {
+    const currentUser = this.context && this.context.user;
+
+    if (!currentUser) {
+      return {
+        success: false,
+        message: "User must be logged in to perform this action"
+      }
+    }
+
+    const currentGameUrl = currentUser.currentGameUrl;
+
+    if (!currentGameUrl) {
+      return {
+        success: false,
+        message: `User ${currentUser.username} is not in any games`
+      }
+    }
+
+    this.collection.findOneAndUpdate(
+      { id: currentUser.id },
+      { $set: { currentGameUrl: null } },
+      { returnNewDocument: true }
+    );
+
+    return {
+      success: true,
+      message: `User ${currentUser.username} has left the game ${currentGameUrl}`
+    };
+  }
+
   async inGame(url) {
     return await this.collection.find({ currentGameUrl: url }).toArray()
   }

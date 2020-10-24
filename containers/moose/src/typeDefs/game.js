@@ -15,6 +15,11 @@ const game = gql`
     message: String
     game: Game
   }
+
+  type LeaveGameResponse {
+    success: Boolean!
+    message: String
+  }
 `;
 
 module.exports = {

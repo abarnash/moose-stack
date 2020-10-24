@@ -186,7 +186,7 @@ mutation JoinGame {
 }
 ```
 
-### Errors
+#### `joinGame` Errors
 
 _Invalid game url_
 
@@ -211,6 +211,55 @@ _Invalid user authorization header_
       "message": "User must be logged in to perform this action",
       "success": false,
       "game": null
+    }
+  }
+}
+```
+
+```
+mutation LeaveGame {
+  leaveGame {
+    success
+    message
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "leaveGame": {
+      "success": true,
+      "message": "User game-tester has left the game of-idea"
+    }
+  }
+}
+```
+
+
+#### `leaveGame` Errors
+
+_Logged in user not in any games_
+
+```json
+{
+  "data": {
+    "leaveGame": {
+      "success": false,
+      "message": "User game-tester is not in any games"
+    }
+  }
+}
+```
+
+_Invalid user authorization header_
+
+```json
+{
+  "data": {
+    "leaveGame": {
+      "success": false,
+      "message": "User must be logged in to perform this action"
     }
   }
 }
