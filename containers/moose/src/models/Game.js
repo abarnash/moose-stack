@@ -4,8 +4,8 @@ const { DataSource } = require('apollo-datasource');
 
 class Game extends DataSource {
   constructor(collection) {
-    super()
-    this.collection = collection
+    super();
+    this.collection = collection;
   }
 
   initialize(config) {
@@ -13,28 +13,32 @@ class Game extends DataSource {
   }
 
   async createGame() {
-    const url = randomWords(2).join("-")
+    const url = randomWords(2).join("-");
     const createdBy = this.context && this.context.user;
     const startTime = Date.now();
 
     if (!createdBy) {
       return {
         success: false,
-        message: "User must be logged in to perform this action"
-      }
+        message: "User must be logged in to perform this action",
+      };
     }
 
-    const game = await this.collection.insertOne({ url, createdBy, startTime, id: v4() }).then(({ ops }) => ops[0])
+    const game = await this.collection.insertOne({ url, createdBy, startTime, id: v4() }).then(({ ops }) => ops[0]);
 
     return {
       success: true,
       message: `New game with url "${game.url}" created!`,
-      game
+      game,
     };
   }
 
-  async findGame(url) {
-    return await this.collection.findOne({ url })
+  async findGameByUrl(url) {
+    return await this.collection.findOne({ url });
+  }
+
+  async findGame(id) {
+    return await this.collection.findOne({ id: id });
   }
 }
 

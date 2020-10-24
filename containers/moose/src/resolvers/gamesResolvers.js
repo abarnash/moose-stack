@@ -1,15 +1,25 @@
 const gamesResolvers = {
   Query: {
-    game: async (_, { url }, { dataSources }) => dataSources.games.findGame(url)
+    game: async (_, { url }, { dataSources }) => dataSources.games.findGameByUrl(url),
   },
   Mutation: {
-    newGame: async (_, __, { dataSources }) => dataSources.games.createGame(),
+    newGame: async (_, __, { dataSources }) => {
+      const createdGame = await dataSources.games.createGame();
+
+      if (createdGame.success) {
+        dataSources.users.joinGame(createdGame.game);
+      }
+
+      return createdGame;
+    },
   },
   Game: {
-    users: async (game, _, { dataSources }) => dataSources.users.inGame(game.url),
+    users: async (game, _, { dataSources }) => {
+      return dataSources.users.findUsersInGame(game.id);
+    },
   },
 };
 
 module.exports = {
   gamesResolvers,
-}
+};

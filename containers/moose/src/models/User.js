@@ -3,8 +3,8 @@ const { DataSource } = require('apollo-datasource');
 
 class User extends DataSource {
   constructor(collection) {
-    super()
-    this.collection = collection
+    super();
+    this.collection = collection;
   }
 
   /**
@@ -18,17 +18,19 @@ class User extends DataSource {
   }
 
   async allUsers() {
-    return await this.collection.find({ }).toArray()
+    return await this.collection.find({ }).toArray();
   }
 
   async createUser({ username, name, email }) {
-    return await this.collection.insertOne({ username, name, email, id: v4() }).then(({ ops }) => ops[0])
+    return await this.collection.insertOne({ username, name, email, id: v4() }).then(({ ops }) => ops[0]);
   }
 
-  async findUser({ username: usernameArg } = {}) {
-    const username = this.context && this.context.user ? this.context.user.username : usernameArg;
+  async findUser(username) {
+    return await this.collection.findOne({ username });
+  }
 
-    return await this.collection.findOne({ username })
+  async findUserFromContext() {
+    return await this.collection.findOne({ username: this.context?.user?.username });
   }
 
   async joinGame(game) {
@@ -37,21 +39,24 @@ class User extends DataSource {
     if (!currentUser) {
       return {
         success: false,
-        message: "User must be logged in to perform this action"
-      }
+        message: "User must be logged in to perform this action",
+      };
     }
 
     this.collection.findOneAndUpdate(
       { id: currentUser.id },
-      { $set: { currentGameUrl: game.url } },
-      { returnNewDocument: true }
+      { $set: { currentGameId: game.id } }
     );
 
     return {
       success: true,
       message: `User ${currentUser.username} has joined game ${game.url}`,
-      game: game
+      game,
     };
+  }
+
+  async findUsersInGame(gameId) {
+    return await this.collection.find({ currentGameId: gameId }).toArray();
   }
 
   async leaveGame() {
@@ -60,33 +65,29 @@ class User extends DataSource {
     if (!currentUser) {
       return {
         success: false,
-        message: "User must be logged in to perform this action"
-      }
+        message: "User must be logged in to perform this action",
+      };
     }
 
-    const currentGameUrl = currentUser.currentGameUrl;
+    const currentGameUrl = currentUser.currentGameId;
 
     if (!currentGameUrl) {
       return {
         success: false,
-        message: `User ${currentUser.username} is not in any games`
-      }
+        message: `User ${currentUser.username} is not in any games`,
+      };
     }
 
     this.collection.findOneAndUpdate(
       { id: currentUser.id },
-      { $set: { currentGameUrl: null } },
+      { $set: { currentGameId: null } },
       { returnNewDocument: true }
     );
 
     return {
       success: true,
-      message: `User ${currentUser.username} has left the game ${currentGameUrl}`
+      message: `User ${currentUser.username} has left the game`,
     };
-  }
-
-  async inGame(url) {
-    return await this.collection.find({ currentGameUrl: url }).toArray()
   }
 }
 

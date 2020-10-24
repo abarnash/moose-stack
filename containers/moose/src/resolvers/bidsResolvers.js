@@ -7,4 +7,4 @@ const bidsResolvers = {
 
 module.exports = {
   bidsResolvers,
-}
+};

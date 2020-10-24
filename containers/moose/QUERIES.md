@@ -2,11 +2,12 @@
 
 ```
 mutation AddUser {
-  newUser(username: "test-user10", name: "Test User", email: "test-user@gmail.com") {
+  newUser(username: "newest-user", name: "Newest User", email: "newest-user@gmail.com") {
     success
     message
     user {
       username
+      currentGameUrl
     }
   }
 }
@@ -17,10 +18,10 @@ mutation AddUser {
   "data": {
     "newUser": {
       "success": true,
-      "message": "New user with username \"test-user\" created!",
+      "message": "New user with username \"newest-user\" created!",
       "user": {
-        "username": "test-user",
-        "name": "Test User"
+        "username": "newest-user",
+        "currentGameUrl": null
       }
     }
   }
@@ -62,7 +63,22 @@ mutation Login {
 {
   "data": {
     "login": {
-      "token": "dGVzdC11c2Vy"
+      "success": true,
+      "message": "Successfully logged in as \"newest-user\"",
+      "authenicationToken": "bmV3ZXN0LXVzZXI="
+    }
+  }
+}
+```
+_Error: Bad username_
+
+```json
+{
+  "data": {
+    "login": {
+      "success": false,
+      "message": "Cannot find user with username \"not-a-user\"",
+      "authenicationToken": null
     }
   }
 }
@@ -72,14 +88,13 @@ mutation Login {
 
 ```json
 {
-  "authorization": "dGVzdC11c2Vy"
+  "authorization": "bmV3ZXN0LXVzZXI="
 }
 ```
 
 ```
 query GetLoggedInUser {
   loggedInUser {
-    id
     username
     name
     email
@@ -92,12 +107,19 @@ query GetLoggedInUser {
 {
   "data": {
     "loggedInUser": {
-      "id": "99400792-b740-45df-8ff4-04b94ef686b9",
-      "username": "test-user",
-      "name": "Test User",
-      "email": "test-user@gmail.com",
-      "currentGameUrl": "grandfather-seven"
+      "username": "newest-user",
+      "name": "Newest User",
+      "email": "newest-user@gmail.com",
+      "currentGameUrl": null
     }
+  }
+}
+```
+_Error: No authentication header provided_
+```json
+{
+  "data": {
+    "loggedInUser": null
   }
 }
 ```
@@ -109,6 +131,10 @@ mutation AddGame {
     message
     game {
       url
+      users {
+        username
+        drinksInPot
+      }
     }
   }
 }
@@ -119,19 +145,24 @@ mutation AddGame {
   "data": {
     "newGame": {
       "success": true,
-      "message": "New game with username \"what-coat\" created!",
+      "message": "New game with url \"vowel-thin\" created!",
       "game": {
-        "url": "what-coat"
+        "url": "vowel-thin",
+        "users": [
+          {
+            "username": "newest-user",
+            "drinksInPot": 0
+          }
+        ]
       }
     }
   }
 }
 ```
 
-### addGame Errors
+_Error: Invalid user authorization header_
 
-_Invalid user authorization header_
-
+```json
 {
   "data": {
     "newGame": {
@@ -141,11 +172,12 @@ _Invalid user authorization header_
     }
   }
 }
+```
 
 ```
 query GetGame {
-  game(url: "what-coat") {
-    id
+  game(url: "vowel-thin") {
+    startTime
     createdBy {
       username
     }
@@ -161,12 +193,13 @@ query GetGame {
 {
   "data": {
     "game": {
+      "startTime": "1603571597357",
       "createdBy": {
-        "username": "game-tester"
+        "username": "newest-user"
       },
       "users": [
         {
-          "username": "game-tester",
+          "username": "newest-user",
           "drinksInPot": 0
         }
       ]
@@ -177,7 +210,7 @@ query GetGame {
 
 ```
 mutation JoinGame {
-  joinGame(url: "what-coat") {
+  joinGame(url: "vowel-thin") {
     message
     success
     game {
@@ -195,13 +228,13 @@ mutation JoinGame {
 {
   "data": {
     "joinGame": {
-      "message": "User test-user has joined game what-coat",
+      "message": "User newest-user has joined game vowel-thin",
       "success": true,
       "game": {
-        "url": "what-coat",
+        "url": "vowel-thin",
         "users": [
           {
-            "username": "test-user",
+            "username": "newest-user",
             "drinksInPot": 0
           }
         ]
@@ -211,9 +244,7 @@ mutation JoinGame {
 }
 ```
 
-#### `joinGame` Errors
-
-_Invalid game url_
+_Error: Invalid game url_
 
 ```json
 {
@@ -227,7 +258,7 @@ _Invalid game url_
 }
 ```
 
-_Invalid user authorization header_
+_Error: Invalid user authorization header_
 
 ```json
 {
@@ -255,23 +286,21 @@ mutation LeaveGame {
   "data": {
     "leaveGame": {
       "success": true,
-      "message": "User game-tester has left the game of-idea"
+      "message": "User newest-user has left the game"
     }
   }
 }
 ```
 
 
-#### `leaveGame` Errors
-
-_Logged in user not in any games_
+_Error: Logged in user not in any games_
 
 ```json
 {
   "data": {
     "leaveGame": {
       "success": false,
-      "message": "User game-tester is not in any games"
+      "message": "User newest-user is not in any games"
     }
   }
 }
@@ -304,7 +333,7 @@ mutation AddBid {
   "data": {
     "addBid": {
       "success": true,
-      "message": "User game-tester has poured 5 drinks into the pot in game of-idea"
+      "message": "User newest-user has poured 5 drinks into the pot"
     }
   }
 }
@@ -319,7 +348,7 @@ _Logged in user not in any games_
   "data": {
     "leaveGame": {
       "success": false,
-      "message": "User game-tester is not in any games"
+      "message": "User newest-user is not in any games"
     }
   }
 }
@@ -345,7 +374,7 @@ _User already poured into pot_
   "data": {
     "addBid": {
       "success": false,
-      "message": "User game-tester already poured 5 drinks into the pot in game of-idea"
+      "message": "User newest-user already poured 5 drinks into the pot"
     }
   }
 }
@@ -365,22 +394,31 @@ _Bid is not greater than 0_
 ```
 
 mutation DrinkPot {
-  emptyPot(gameUrl: "of-idea") {
+  emptyPot {
     success
     message
   }
 }
 
-#### `emptyPot` Errors
+```json
+{
+  "data": {
+    "emptyPot": {
+      "success": true,
+      "message": "User newest-user has drank 5 drinks"
+    }
+  }
+}
+```
 
-_Logged in user not in any games_
+_Error: Logged in user not in any games_
 
 ```json
 {
   "data": {
-    "leaveGame": {
+    "emptyPot": {
       "success": false,
-      "message": "User game-tester is not in any games"
+      "message": "User newest-user is not in any games"
     }
   }
 }
@@ -398,19 +436,6 @@ _Invalid user authorization header_
   }
 }
 
-_Logged in user not in provided game_
-
-```json
-{
-  "data": {
-    "emptyPot": {
-      "success": false,
-      "message": "User game-tester is not in the game not-a-real-game"
-    }
-  }
-}
-```
-
 _Pot is empty_
 
 ```json
@@ -418,7 +443,7 @@ _Pot is empty_
   "data": {
     "emptyPot": {
       "success": false,
-      "message": "Game of-idea has no drinks in the pot"
+      "message": "There are no drinks in the pot"
     }
   }
 }

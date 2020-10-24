@@ -17,6 +17,12 @@ const user = gql`
     user: User
   }
 
+  type LoginResponse {
+    success: Boolean!
+    message: String
+    authenicationToken: String
+  }
+
   type JoinGameResponse {
     success: Boolean!
     message: String

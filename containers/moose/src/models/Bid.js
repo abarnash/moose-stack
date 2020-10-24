@@ -3,8 +3,8 @@ const { DataSource } = require('apollo-datasource');
 
 class Bid extends DataSource {
   constructor(collection) {
-    super()
-    this.collection = collection
+    super();
+    this.collection = collection;
   }
 
   /**
@@ -23,50 +23,50 @@ class Bid extends DataSource {
     if (!currentUser) {
       return {
         success: false,
-        message: "User must be logged in to perform this action"
-      }
+        message: "User must be logged in to perform this action",
+      };
     }
 
-    const currentGameUrl = currentUser.currentGameUrl;
+    const currentGameId = currentUser.currentGameId;
 
-    if (!currentGameUrl) {
+    if (!currentGameId) {
       return {
         success: false,
-        message: `User ${currentUser.username} is not in any games`
-      }
+        message: `User ${currentUser.username} is not in any games`,
+      };
     }
 
     const existingBid = await this.collection.findOne({
-      username: currentUser.username,
-      gameUrl: currentGameUrl,
-      inPot: true
+      userId: currentUser.id,
+      gameId: currentGameId,
+      inPot: true,
     });
 
     if (existingBid) {
       return {
         success: false,
-        message: `User ${currentUser.username} already poured ${existingBid.drinks} drinks into the pot in game ${currentGameUrl}`
-      }
+        message: `User ${currentUser.username} already poured ${existingBid.drinks} drinks into the pot`,
+      };
     }
 
     if (drinks < 1) {
       return {
         success: false,
-        message: `You must pour at least one drink into the pot`
-      }
+        message: `You must pour at least one drink into the pot`,
+      };
     }
 
     const bid = await this.collection.insertOne({
-      username: currentUser.username,
-      gameUrl: currentGameUrl,
+      userId: currentUser.id,
+      gameId: currentGameId,
       drinks,
       inPot: true,
-      id: v4()
-    }).then(({ ops }) => ops[0])
+      id: v4(),
+    }).then(({ ops }) => ops[0]);
 
     return {
       success: true,
-      message: `User ${currentUser.username} has poured ${bid.drinks} drinks into the pot in game ${currentGameUrl}`
+      message: `User ${currentUser.username} has poured ${bid.drinks} drinks into the pot`,
     };
   }
 
@@ -74,52 +74,45 @@ class Bid extends DataSource {
     return this.collection.findOne({ username, gameUrl, inPot: true })?.drinks || 0;
   }
 
-  async emptyPot(gameUrl) {
+  async emptyPot() {
     const currentUser = this.context && this.context.user;
 
     if (!currentUser) {
       return {
         success: false,
-        message: "User must be logged in to perform this action"
-      }
+        message: "User must be logged in to perform this action",
+      };
     }
 
-    const currentGameUrl = currentUser.currentGameUrl;
+    const gameId = currentUser.currentGameId;
 
-    if (!currentGameUrl) {
+    if (!gameId) {
       return {
         success: false,
-        message: `User ${currentUser.username} is not in any games`
-      }
+        message: `User ${currentUser.username} is not in any games`,
+      };
     }
 
-    if (currentGameUrl !== gameUrl) {
-      return {
-        success: false,
-        message: `User ${currentUser.username} is not in the game ${gameUrl}`
-      }
-    }
-
-    const currentBids = await this.collection.find({ gameUrl, inPot: true }).toArray();
+    const currentBids = await this.collection.find({ gameId, inPot: true }).toArray();
     const numbersOfDrinks = currentBids.map(bid => bid.drinks);
     const totalDrinks = numbersOfDrinks.reduce((totalNumberOfDrinks, drinks) => totalNumberOfDrinks + drinks, 0);
 
     if (totalDrinks === 0) {
       return {
         success: false,
-        message: `Game ${gameUrl} has no drinks in the pot`
-      }
+        message: `There are no drinks in the pot`,
+      };
     }
 
     this.collection.update(
-      { gameUrl, inPot: true },
+      { gameId, inPot: true },
       { $set: { inPot: false } }
     );
 
 
     return {
       success: true,
-      message: `User ${currentUser.username} has drank ${totalDrinks} drinks`
+      message: `User ${currentUser.username} has drank ${totalDrinks} drinks`,
     };
   }
 }
