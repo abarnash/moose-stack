@@ -6,8 +6,9 @@ import Nav from 'react-bootstrap/nav';
 import Button from 'react-bootstrap/button';
 import {Route, BrowserRouter, Redirect, Switch} from 'react-router-dom';
 import './App.css';
-import {Home} from './Home';
 import {About} from './About';
+import {Game} from './Game';
+import {Home} from './Home';
 
 const CREATE_GAME = gql`
   mutation NewGame {
@@ -21,7 +22,7 @@ const CREATE_GAME = gql`
   }
 `;
 
-function Shell() {
+export function Shell() {
   const [state, setState] = useState({newGameUrl: undefined});
   const onCompleted = (data) => {
     setState({newGameUrl: '/' + data.newGame.game.url});
@@ -59,6 +60,9 @@ function Shell() {
         <Route path="/about">
           <About />
         </Route>
+        <Route path="/:gameName">
+          <Game />
+        </Route>
         <Route path="/">
           <Home />
         </Route>
@@ -66,5 +70,3 @@ function Shell() {
     </div>
   );
 }
-
-export default Shell;
