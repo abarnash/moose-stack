@@ -1,5 +1,6 @@
 ## No http auth header needed
 
+```
 mutation AddUser {
   newUser(username: "test-user10", name: "Test User", email: "test-user@gmail.com") {
     success
@@ -9,7 +10,9 @@ mutation AddUser {
     }
   }
 }
+```
 
+```json
 {
   "data": {
     "newUser": {
@@ -22,13 +25,17 @@ mutation AddUser {
     }
   }
 }
+```
 
+```
 query GetAllUsers {
   allUsers {
     username
   }
 }
+```
 
+```json
 {
   "data": {
     "allUsers": [
@@ -41,13 +48,17 @@ query GetAllUsers {
     ]
   }
 }
+```
 
+```
 mutation Login {
   login(username: "test-user") {
     token
   }
 }
+```
 
+```json
 {
   "data": {
     "login": {
@@ -55,13 +66,17 @@ mutation Login {
     }
   }
 }
+```
 
 ## HTTP auth header required (pulled from login response)
 
+```json
 {
   "authorization": "dGVzdC11c2Vy"
 }
+```
 
+```
 query GetLoggedInUser {
   loggedInUser {
     id
@@ -71,7 +86,9 @@ query GetLoggedInUser {
     currentGameUrl
   }
 }
+```
 
+```json
 {
   "data": {
     "loggedInUser": {
@@ -83,7 +100,9 @@ query GetLoggedInUser {
     }
   }
 }
+```
 
+```
 mutation AddGame {
   newGame {
     success
@@ -93,7 +112,9 @@ mutation AddGame {
     }
   }
 }
+```
 
+```json
 {
   "data": {
     "newGame": {
@@ -105,7 +126,9 @@ mutation AddGame {
     }
   }
 }
+```
 
+```
 query GetGame {
   game(url: "what-coat") {
     startTime
@@ -114,7 +137,9 @@ query GetGame {
     }
   }
 }
+```
 
+```json
 {
   "data": {
     "game": {
@@ -125,43 +150,68 @@ query GetGame {
     }
   }
 }
+```
 
-
+```
 mutation JoinGame {
   joinGame(url: "what-coat") {
     message
     success
-    user {
-      currentGameUrl
+    game {
+      url
+      users {
+        username
+      }
     }
   }
 }
+```
 
+```json
 {
   "data": {
     "joinGame": {
       "message": "User test-user has joined game grandfather-seven",
-      "success": true
+      "success": true,
+      "game": {
+        "url": "grandfather-seven",
+        "users": [
+          {
+            "username": "test-user"
+          }
+        ]
+      }
     }
   }
 }
+```
 
 ### Errors
 
+_Invalid game url_
+
+```json
 {
   "data": {
     "joinGame": {
       "message": "Cannot find game with url \"grandfather\"",
-      "success": false
+      "success": false,
+      "game": null
     }
   }
 }
+```
 
+_Invalid user authorization header_
+
+```json
 {
   "data": {
     "joinGame": {
       "message": "User must be logged in to perform this action",
-      "success": false
+      "success": false,
+      "game": null
     }
   }
 }
+```
