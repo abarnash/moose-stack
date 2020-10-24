@@ -1,6 +1,7 @@
 import {useQuery} from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import React, {useState} from 'react';
+import Spinner from 'react-bootstrap/spinner';
 import {useParams} from 'react-router-dom';
 
 const GET_GAME = gql`
@@ -20,7 +21,10 @@ export function Game() {
   });
 
   if (loading) {
-    return (<p>Loading...</p>);
+    return (
+      <Spinner animation="border">
+      </Spinner>
+    );
   }
 
   return (
