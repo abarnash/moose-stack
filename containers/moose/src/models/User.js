@@ -27,7 +27,7 @@ class User extends DataSource {
     return await this.collection.findOne({ username })
   }
 
-  async joinGame(url) {
+  async joinGame(game) {
     const currentUser = this.context && this.context.user;
 
     if (!currentUser) {
@@ -39,13 +39,14 @@ class User extends DataSource {
 
     this.collection.findOneAndUpdate(
       { id: currentUser.id },
-      { $set: { currentGameUrl: url } },
+      { $set: { currentGameUrl: game.url } },
       { returnNewDocument: true }
     );
 
     return {
       success: true,
-      message: `User ${currentUser.username} has joined game ${url}`
+      message: `User ${currentUser.username} has joined game ${game.url}`,
+      game: game
     };
   }
 }

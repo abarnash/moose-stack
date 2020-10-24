@@ -44,7 +44,7 @@ const usersResolvers = {
         }
       }
 
-      return await dataSources.users.joinGame(url)
+      return await dataSources.users.joinGame(game)
     },
   },
 };

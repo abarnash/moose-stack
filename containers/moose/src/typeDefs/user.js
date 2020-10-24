@@ -19,6 +19,7 @@ const user = gql`
   type JoinGameResponse {
     success: Boolean!
     message: String
+    game: Game
   }
 `;
 
