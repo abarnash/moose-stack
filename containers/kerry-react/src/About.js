@@ -17,8 +17,21 @@ export function About() {
         Credits
       </h3>
       <p>
-        Kerry "The Moose Czar" Cheng
+        <a href="https://github.com/abarnash/moose-stack">
+          https://github.com/abarnash/moose-stack
+        </a>
       </p>
+      <ul>
+        <li>
+          leash
+        </li>
+        <li>
+          Kerry "The Moose Czar" Cheng
+        </li>
+        <li>
+          hschallh
+        </li>
+      </ul>
     </div>
   );
 }
