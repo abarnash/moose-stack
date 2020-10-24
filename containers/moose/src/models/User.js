@@ -53,6 +53,10 @@ class User extends DataSource {
       game: game
     };
   }
+
+  async inGame(url) {
+    return await this.collection.find({ currentGameUrl: url }).toArray()
+  }
 }
 
 module.exports = {

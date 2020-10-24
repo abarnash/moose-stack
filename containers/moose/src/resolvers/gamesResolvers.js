@@ -13,6 +13,9 @@ const gamesResolvers = {
       };
     },
   },
+  Game: {
+    users: async (game, _, { dataSources }) => dataSources.users.inGame(game.url)
+  },
 };
 
 module.exports = {
