@@ -46,6 +46,9 @@ const usersResolvers = {
     },
     leaveGame: async (_, __, { dataSources }) => dataSources.users.leaveGame(),
   },
+  User: {
+    drinksInPot: async (user, _, { dataSources }) => dataSources.bids.findBid(user.username, user.currentGameUrl),
+  }
 };
 
 module.exports = {

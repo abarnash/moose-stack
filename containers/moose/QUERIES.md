@@ -145,9 +145,13 @@ _Invalid user authorization header_
 ```
 query GetGame {
   game(url: "what-coat") {
-    startTime
+    id
     createdBy {
       username
+    }
+    users {
+      username
+      drinksInPot
     }
   }
 }
@@ -157,10 +161,15 @@ query GetGame {
 {
   "data": {
     "game": {
-      "startTime": "1602544727872",
       "createdBy": {
-        "username": "test-user"
-      }
+        "username": "game-tester"
+      },
+      "users": [
+        {
+          "username": "game-tester",
+          "drinksInPot": 0
+        }
+      ]
     }
   }
 }
@@ -175,6 +184,7 @@ mutation JoinGame {
       url
       users {
         username
+        drinksInPot
       }
     }
   }
@@ -185,13 +195,14 @@ mutation JoinGame {
 {
   "data": {
     "joinGame": {
-      "message": "User test-user has joined game grandfather-seven",
+      "message": "User test-user has joined game what-coat",
       "success": true,
       "game": {
-        "url": "grandfather-seven",
+        "url": "what-coat",
         "users": [
           {
-            "username": "test-user"
+            "username": "test-user",
+            "drinksInPot": 0
           }
         ]
       }
@@ -278,3 +289,138 @@ _Invalid user authorization header_
   }
 }
 ```
+
+```
+mutation AddBid {
+  addBid(drinks: 5) {
+    success
+    message
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "addBid": {
+      "success": true,
+      "message": "User game-tester has poured 5 drinks into the pot in game of-idea"
+    }
+  }
+}
+```
+
+#### `addBid` Errors
+
+_Logged in user not in any games_
+
+```json
+{
+  "data": {
+    "leaveGame": {
+      "success": false,
+      "message": "User game-tester is not in any games"
+    }
+  }
+}
+```
+
+_Invalid user authorization header_
+
+```json
+{
+  "data": {
+    "leaveGame": {
+      "success": false,
+      "message": "User must be logged in to perform this action"
+    }
+  }
+}
+```
+
+_User already poured into pot_
+
+```json
+{
+  "data": {
+    "addBid": {
+      "success": false,
+      "message": "User game-tester already poured 5 drinks into the pot in game of-idea"
+    }
+  }
+}
+```
+
+_Bid is not greater than 0_
+
+```json
+{
+  "data": {
+    "addBid": {
+      "success": false,
+      "message": "You must pour at least one drink into the pot"
+    }
+  }
+}
+```
+
+mutation DrinkPot {
+  emptyPot(gameUrl: "of-idea") {
+    success
+    message
+  }
+}
+
+#### `emptyPot` Errors
+
+_Logged in user not in any games_
+
+```json
+{
+  "data": {
+    "leaveGame": {
+      "success": false,
+      "message": "User game-tester is not in any games"
+    }
+  }
+}
+```
+
+_Invalid user authorization header_
+
+```json
+{
+  "data": {
+    "leaveGame": {
+      "success": false,
+      "message": "User must be logged in to perform this action"
+    }
+  }
+}
+
+_Logged in user not in provided game_
+
+```json
+{
+  "data": {
+    "emptyPot": {
+      "success": false,
+      "message": "User game-tester is not in the game not-a-real-game"
+    }
+  }
+}
+```
+
+_Pot is empty_
+
+```json
+{
+  "data": {
+    "emptyPot": {
+      "success": false,
+      "message": "Game of-idea has no drinks in the pot"
+    }
+  }
+}
+```
+
