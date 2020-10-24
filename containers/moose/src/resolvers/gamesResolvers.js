@@ -7,7 +7,7 @@ const gamesResolvers = {
       const createdGame = await dataSources.games.createGame();
 
       if (createdGame.success) {
-        dataSources.users.joinGame(createdGame.game);
+        await dataSources.users.joinGame(createdGame.game);
       }
 
       return createdGame;

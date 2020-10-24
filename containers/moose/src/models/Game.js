@@ -14,17 +14,17 @@ class Game extends DataSource {
 
   async createGame() {
     const url = randomWords(2).join("-");
-    const createdBy = this.context && this.context.user;
     const startTime = Date.now();
+    const currentUser = this.context?.requireLogin;
 
-    if (!createdBy) {
-      return {
-        success: false,
-        message: "User must be logged in to perform this action",
-      };
-    }
+    if (currentUser.error) return currentUser.error;
 
-    const game = await this.collection.insertOne({ url, createdBy, startTime, id: v4() }).then(({ ops }) => ops[0]);
+    const game = await this.collection.insertOne({
+      url,
+      createdBy: currentUser,
+      startTime,
+      id: v4(),
+    }).then(({ ops }) => ops[0]);
 
     return {
       success: true,

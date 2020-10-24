@@ -6,7 +6,7 @@ const usersResolvers = {
   Mutation: {
     newUser: async (_, { username, name, email }, { dataSources }) => {
       const db = dataSources.users;
-      const existingUser = await db.findUser({ username });
+      const existingUser = await db.findUser(username);
 
       if (existingUser){
         return {
@@ -56,7 +56,11 @@ const usersResolvers = {
   },
   User: {
     drinksInPot: async (user, _, { dataSources }) => dataSources.bids.findBid(user.username, user.currentGameUrl),
-    currentGameUrl: async (user, _, { dataSources }) => dataSources.games.findGame(user.currentGameId)?.url,
+    currentGameUrl: async (user, _, { dataSources }) => {
+      const currentGame = await dataSources.games.findGame(user.currentGameId);
+
+      return currentGame.url;
+    },
   },
 };
 

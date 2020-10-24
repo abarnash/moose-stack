@@ -18,27 +18,15 @@ class Bid extends DataSource {
   }
 
   async addBid(drinks) {
-    const currentUser = this.context && this.context.user;
+    const currentUser = this.context?.requireLogin;
+    const currentGame = this.context?.requireJoinedGame;
 
-    if (!currentUser) {
-      return {
-        success: false,
-        message: "User must be logged in to perform this action",
-      };
-    }
-
-    const currentGameId = currentUser.currentGameId;
-
-    if (!currentGameId) {
-      return {
-        success: false,
-        message: `User ${currentUser.username} is not in any games`,
-      };
-    }
+    if (currentUser.error) return currentUser.error;
+    if (currentGame.error) return currentGame.error;
 
     const existingBid = await this.collection.findOne({
       userId: currentUser.id,
-      gameId: currentGameId,
+      gameId: currentGame.id,
       inPot: true,
     });
 
@@ -58,7 +46,7 @@ class Bid extends DataSource {
 
     const bid = await this.collection.insertOne({
       userId: currentUser.id,
-      gameId: currentGameId,
+      gameId: currentGame.id,
       drinks,
       inPot: true,
       id: v4(),
@@ -75,37 +63,25 @@ class Bid extends DataSource {
   }
 
   async emptyPot() {
-    const currentUser = this.context && this.context.user;
+    const currentUser = this.context?.requireLogin;
+    const currentGame = this.context?.requireJoinedGame;
 
-    if (!currentUser) {
-      return {
-        success: false,
-        message: "User must be logged in to perform this action",
-      };
-    }
+    if (currentUser.error) return currentUser.error;
+    if (currentGame.error) return currentGame.error;
 
-    const gameId = currentUser.currentGameId;
-
-    if (!gameId) {
-      return {
-        success: false,
-        message: `User ${currentUser.username} is not in any games`,
-      };
-    }
-
-    const currentBids = await this.collection.find({ gameId, inPot: true }).toArray();
+    const currentBids = await this.collection.find({ gameId: currentGame.id, inPot: true }).toArray();
     const numbersOfDrinks = currentBids.map(bid => bid.drinks);
     const totalDrinks = numbersOfDrinks.reduce((totalNumberOfDrinks, drinks) => totalNumberOfDrinks + drinks, 0);
 
     if (totalDrinks === 0) {
       return {
         success: false,
-        message: `There are no drinks in the pot`,
+        message: `There are no drinks in the pot for game ${currentGame.url}`,
       };
     }
 
     this.collection.update(
-      { gameId, inPot: true },
+      { gameId: currentGame.id, inPot: true },
       { $set: { inPot: false } }
     );
 

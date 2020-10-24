@@ -30,20 +30,17 @@ class User extends DataSource {
   }
 
   async findUserFromContext() {
-    return await this.collection.findOne({ username: this.context?.user?.username });
+    const currentUser = this.context?.requireLogin;
+
+    return await this.collection.findOne({ username:currentUser?.username });
   }
 
   async joinGame(game) {
-    const currentUser = this.context && this.context.user;
+    const currentUser = this.context?.requireLogin;
 
-    if (!currentUser) {
-      return {
-        success: false,
-        message: "User must be logged in to perform this action",
-      };
-    }
+    if (currentUser.error) return currentUser.error;
 
-    this.collection.findOneAndUpdate(
+    await this.collection.findOneAndUpdate(
       { id: currentUser.id },
       { $set: { currentGameId: game.id } }
     );
@@ -60,23 +57,11 @@ class User extends DataSource {
   }
 
   async leaveGame() {
-    const currentUser = this.context && this.context.user;
+    const currentUser = this.context?.requireLogin;
+    const currentGame = this.context?.requireJoinedGame;
 
-    if (!currentUser) {
-      return {
-        success: false,
-        message: "User must be logged in to perform this action",
-      };
-    }
-
-    const currentGameUrl = currentUser.currentGameId;
-
-    if (!currentGameUrl) {
-      return {
-        success: false,
-        message: `User ${currentUser.username} is not in any games`,
-      };
-    }
+    if (currentUser.error) return currentUser.error;
+    if (currentGame.error) return currentGame.error;
 
     this.collection.findOneAndUpdate(
       { id: currentUser.id },
@@ -86,7 +71,7 @@ class User extends DataSource {
 
     return {
       success: true,
-      message: `User ${currentUser.username} has left the game`,
+      message: `User ${currentUser.username} has left the game ${currentGame.url}`,
     };
   }
 }

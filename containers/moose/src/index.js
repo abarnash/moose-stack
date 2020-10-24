@@ -11,6 +11,20 @@ const { Bid } = require("./models/Bid");
 const MONGODB_SERVICE_HOST = "localhost";
 const MONGODB_SERVICE_PORT = "27017";
 
+const REQUIRE_LOGIN_ERROR = {
+  error: {
+    success: false,
+    message: "User must be logged in to perform this action",
+  },
+};
+
+const REQUIRE_JOINED_GAME_ERROR = {
+  error: {
+    success: false,
+    message: "User must be logged in to perform this action",
+  },
+};
+
 const mongoPort = parseInt(MONGODB_SERVICE_PORT);
 const mongoUri = `mongodb://${MONGODB_SERVICE_HOST}:${mongoPort}/accounts`;
 const client = new MongoClient(mongoUri);
@@ -31,9 +45,12 @@ const context = async ({ req }) => {
   // Simple auth check on every request based on the username provided in the header
   const auth = (req.headers && req.headers.authorization) || "";
   const username = Buffer.from(auth, "base64").toString("ascii");
-  const user = await client.db().collection("users").findOne({ username });
+  const currentUser = await client.db().collection("users").findOne({ username });
+  const currentGame = await client.db().collection("games").findOne({ id: currentUser.currentGameId });
+  const requireLogin = currentUser ? currentUser : REQUIRE_LOGIN_ERROR;
+  const requireJoinedGame = currentGame ? currentGame : REQUIRE_JOINED_GAME_ERROR;
 
-  return { user };
+  return { requireLogin, requireJoinedGame };
 };
 
 const server = new ApolloServer({ typeDefs, resolvers, dataSources, context });
