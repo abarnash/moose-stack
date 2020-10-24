@@ -45,8 +45,8 @@ export function Shell(props) {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
           </Nav>
-        <Button onClick={createGame}>
-          Create a game
+        <Button onClick={createGame} disabled={loading}>
+          {loading ? 'Creating...' : 'Create a game'}
         </Button>
         </Navbar.Collapse>
       </Navbar>
