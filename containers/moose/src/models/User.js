@@ -17,6 +17,10 @@ class User extends DataSource {
     this.context = config.context;
   }
 
+  async allUsers() {
+    return await this.collection.find({ }).toArray()
+  }
+
   async createUser({ username, name, email }) {
     return await this.collection.insertOne({ username, name, email, id: v4() }).then(({ ops }) => ops[0])
   }

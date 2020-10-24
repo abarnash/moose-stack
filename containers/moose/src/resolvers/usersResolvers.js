@@ -1,10 +1,7 @@
 const usersResolvers = {
   Query: {
-    loggedInUser: async (_, __, { dataSources }) => {
-      const existingUser = await dataSources.users.findUser();
-
-      return existingUser;
-    }
+    loggedInUser: async (_, __, { dataSources }) => dataSources.users.findUser(),
+    allUsers : async (_, __, { dataSources }) => dataSources.users.allUsers(),
   },
   Mutation: {
     newUser: async (_, { username, name, email }, { dataSources }) => {
