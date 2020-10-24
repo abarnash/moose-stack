@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 
 const GET_ADA_USER = gql`
 {
-  user(username: "@ada") {
+  allUsers {
     name
   }
 }`
