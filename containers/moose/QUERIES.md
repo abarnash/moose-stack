@@ -23,6 +23,25 @@ mutation AddUser {
   }
 }
 
+query GetAllUsers {
+  allUsers {
+    username
+  }
+}
+
+{
+  "data": {
+    "allUsers": [
+      {
+        "username": "hschallh"
+      },
+      {
+        "username": "test-user"
+      }
+    ]
+  }
+}
+
 mutation Login {
   login(username: "test-user") {
     token
