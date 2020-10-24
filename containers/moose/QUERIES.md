@@ -128,6 +128,20 @@ mutation AddGame {
 }
 ```
 
+### addGame Errors
+
+_Invalid user authorization header_
+
+{
+  "data": {
+    "newGame": {
+      "success": false,
+      "message": "User must be logged in to perform this action",
+      "game": null
+    }
+  }
+}
+
 ```
 query GetGame {
   game(url: "what-coat") {

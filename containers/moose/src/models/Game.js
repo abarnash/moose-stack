@@ -17,7 +17,20 @@ class Game extends DataSource {
     const createdBy = this.context && this.context.user;
     const startTime = Date.now();
 
-    return await this.collection.insertOne({ url, createdBy, startTime, id: v4() }).then(({ ops }) => ops[0])
+    if (!createdBy) {
+      return {
+        success: false,
+        message: "User must be logged in to perform this action"
+      }
+    }
+
+    const game = await this.collection.insertOne({ url, createdBy, startTime, id: v4() }).then(({ ops }) => ops[0])
+
+    return {
+      success: true,
+      message: `New game with url "${game.url}" created!`,
+      game
+    };
   }
 
   async findGame(url) {
