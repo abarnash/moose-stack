@@ -1,38 +1,13 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/navbar';
-import Nav from 'react-bootstrap/nav';
-import Button from 'react-bootstrap/button';
-import {Route, BrowserRouter, Switch} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import './App.css';
-import {Home} from './Home';
-import {About} from './About';
+import {Shell} from './Shell';
 
 function App() {
-  const createGame = () => alert('we should implement this');
-
   return (
     <BrowserRouter>
-      <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="/">Online Moose</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/about">About</Nav.Link>
-          </Nav>
-        <Button onClick={createGame}>
-          Create a game
-        </Button>
-        </Navbar.Collapse>
-      </Navbar>
-      <Switch>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <Shell>
+      </Shell>
     </BrowserRouter>
   );
 }
