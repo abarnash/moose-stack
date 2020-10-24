@@ -1,10 +1,10 @@
 import {useMutation} from '@apollo/react-hooks';
 import gql from "graphql-tag";
-import React, {useState} from 'react';
+import React from 'react';
 import Navbar from 'react-bootstrap/navbar';
 import Nav from 'react-bootstrap/nav';
 import Button from 'react-bootstrap/button';
-import {Route, BrowserRouter, Redirect, Switch} from 'react-router-dom';
+import {Route, useHistory, Switch} from 'react-router-dom';
 import './App.css';
 import {About} from './About';
 import {Game} from './Game';
@@ -22,10 +22,10 @@ const CREATE_GAME = gql`
   }
 `;
 
-export function Shell() {
-  const [state, setState] = useState({newGameUrl: undefined});
+export function Shell(props) {
+  const history = useHistory();
   const onCompleted = (data) => {
-    setState({newGameUrl: '/' + data.newGame.game.url});
+    history.push('/' + data.newGame.game.url);
   };
   const onError = () => {
     alert('Error');
@@ -34,12 +34,6 @@ export function Shell() {
     onCompleted,
     onError,
   });
-
-  if (state.newGameUrl) {
-    return (
-      <Redirect push to={state.newGameUrl} />
-    );
-  }
 
   return (
     <div>
