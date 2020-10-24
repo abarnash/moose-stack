@@ -22,7 +22,22 @@ class User extends DataSource {
   }
 
   async createUser({ username, name, email }) {
-    return await this.collection.insertOne({ username, name, email, id: v4() }).then(({ ops }) => ops[0]);
+    const existingUser = await this.findUser(username);
+
+    if (existingUser) {
+      return {
+        success: false,
+        message: `User with username "${username}" already exists!`,
+      };
+    }
+
+    const user = await this.collection.insertOne({ username, name, email, id: v4() }).then(({ ops }) => ops[0]);
+
+    return {
+      success: true,
+      message: `New user with username "${user.username}" created!`,
+      user,
+    };
   }
 
   async findUser(username) {
@@ -33,6 +48,24 @@ class User extends DataSource {
     const currentUser = this.context?.requireLogin;
 
     return await this.collection.findOne({ username:currentUser?.username });
+  }
+
+  async login(username) {
+    const user = await this.findUser(username);
+
+    if (!user) {
+      return {
+        success: false,
+        message: `Cannot find user with username "${username}"`,
+      };
+    }
+
+
+    return {
+      success: true,
+      message: `Successfully logged in as "${username}"`,
+      authenicationToken: Buffer.from(username).toString('base64'),
+    };
   }
 
   async joinGame(game) {
