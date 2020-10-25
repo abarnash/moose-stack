@@ -8,21 +8,7 @@ const { User } = require("./models/User");
 const { Game } = require("./models/Game");
 const { Bid } = require("./models/Bid");
 
-const { MONGODB_URI } = require("./constants");
-
-const REQUIRE_LOGIN_ERROR = {
-  error: {
-    success: false,
-    message: "User must be logged in to perform this action",
-  },
-};
-
-const REQUIRE_JOINED_GAME_ERROR = {
-  error: {
-    success: false,
-    message: "User must be logged in to perform this action",
-  },
-};
+const { MONGODB_URI, REQUIRE_LOGIN_ERROR, REQUIRE_JOINED_GAME_ERROR } = require("./constants");
 
 const client = new MongoClient(MONGODB_URI);
 

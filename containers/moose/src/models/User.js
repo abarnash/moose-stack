@@ -22,7 +22,7 @@ class User extends DataSource {
   }
 
   async createUser({ username, name, email }) {
-    const existingUser = await this.findUser(username);
+    const existingUser = await this.findUserByUsername(username);
 
     if (existingUser) {
       return {
@@ -40,18 +40,20 @@ class User extends DataSource {
     };
   }
 
-  async findUser(username) {
+  async findUserByUsername(username) {
     return await this.collection.findOne({ username });
   }
 
   async findUserFromContext() {
     const currentUser = this.context?.requireLogin;
 
-    return await this.collection.findOne({ username:currentUser?.username });
+    if (currentUser?.error) return null;
+
+    return currentUser;
   }
 
   async login(username) {
-    const user = await this.findUser(username);
+    const user = await this.findUserByUsername(username);
 
     if (!user) {
       return {
