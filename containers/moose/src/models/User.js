@@ -62,7 +62,6 @@ class User extends DataSource {
       };
     }
 
-
     return {
       success: true,
       message: `Successfully logged in as "${username}"`,
