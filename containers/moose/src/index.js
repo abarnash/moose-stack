@@ -8,8 +8,7 @@ const { User } = require("./models/User");
 const { Game } = require("./models/Game");
 const { Bid } = require("./models/Bid");
 
-const MONGODB_SERVICE_HOST = "localhost";
-const MONGODB_SERVICE_PORT = "27017";
+const { MONGODB_URI } = require("./constants");
 
 const REQUIRE_LOGIN_ERROR = {
   error: {
@@ -25,9 +24,7 @@ const REQUIRE_JOINED_GAME_ERROR = {
   },
 };
 
-const mongoPort = parseInt(MONGODB_SERVICE_PORT);
-const mongoUri = `mongodb://${MONGODB_SERVICE_HOST}:${mongoPort}/accounts`;
-const client = new MongoClient(mongoUri);
+const client = new MongoClient(MONGODB_URI);
 
 const connect = async () => {
   await client.connect();
@@ -46,7 +43,7 @@ const context = async ({ req }) => {
   const auth = (req.headers && req.headers.authorization) || "";
   const username = Buffer.from(auth, "base64").toString("ascii");
   const currentUser = await client.db().collection("users").findOne({ username });
-  const currentGame = await client.db().collection("games").findOne({ id: currentUser.currentGameId });
+  const currentGame = await client.db().collection("games").findOne({ id: currentUser?.currentGameId });
   const requireLogin = currentUser ? currentUser : REQUIRE_LOGIN_ERROR;
   const requireJoinedGame = currentGame ? currentGame : REQUIRE_JOINED_GAME_ERROR;
 

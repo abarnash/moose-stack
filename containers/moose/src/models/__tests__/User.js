@@ -1,18 +1,12 @@
 const { MongoClient } = require('mongodb');
-
 const { User } = require("../User");
+const { MONGODB_TEST_URI } = require("../../constants");
 
 describe('User', () => {
   let collection, connection, db, user;
 
   beforeAll(async () => {
-    const MONGODB_SERVICE_HOST = "localhost";
-    const MONGODB_SERVICE_PORT = "27017";
-
-    const mongoPort = parseInt(MONGODB_SERVICE_PORT);
-    const mongoUri = `mongodb://${MONGODB_SERVICE_HOST}:${mongoPort}/testing`;
-
-    connection = await MongoClient.connect(mongoUri);
+    connection = await MongoClient.connect(MONGODB_TEST_URI);
     db = await connection.db();
     collection = db.collection("users");
     user = new User(collection);
