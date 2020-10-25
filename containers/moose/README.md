@@ -17,3 +17,9 @@ Check out the graphql playground at http://localhost:4000/
 ```bash
 npm test
 ```
+
+### Linting
+
+```bash
+npm run lint
+```
