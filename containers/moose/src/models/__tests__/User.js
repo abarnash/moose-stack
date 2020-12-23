@@ -1,7 +1,8 @@
 const { MongoClient } = require('mongodb');
 const { User } = require('../User');
 const { MONGODB_TEST_URI } = require('../../constants');
-const { loggedInUserContext, errorUserContext } = require('../../testing/utils')
+const { loggedInUserContext, errorUserContext } = require('../../testing/utils');
+const { itBehavesLikeRequiresLogin } = require('../../testing/shared_examples');
 
 describe('User', () => {
   let collection, connection, db, user;
