@@ -25,7 +25,7 @@ const usersResolvers = {
     currentGameUrl: async (user, _, { dataSources }) => {
       const currentGame = await dataSources.games.findGame(user.currentGameId);
 
-      return currentGame.url;
+      return currentGame?.url;
     },
   },
 };

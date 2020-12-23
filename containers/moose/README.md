@@ -12,6 +12,14 @@ npm start
 
 Check out the graphql playground at http://localhost:4000/
 
-### GraphQL Queries and mutations
+### Testing
 
-< Moved to QUERIES.md >
+```bash
+npm test
+```
+
+### Linting
+
+```bash
+npm run lint
+```
